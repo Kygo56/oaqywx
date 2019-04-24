@@ -11,14 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'Web\AppController@getApp');
 
-Route::get('/', 'Web\AppController@getApp')
-    ->middleware('auth');
-
-Route::get('/login', 'Web\AppController@getLogin' )
+Route::get('/login', 'Web\AuthenticationController@getLogin' )
     ->name('login')
     ->middleware('guest');
 

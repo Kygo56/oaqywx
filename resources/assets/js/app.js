@@ -1,9 +1,9 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
+
 
 window._ = require('lodash');
 try {
@@ -34,7 +34,21 @@ if (token) {
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+import Vue from 'vue'
+import router from './routes'
+import 'ant-design-vue/dist/antd.css'
+import Antd from 'ant-design-vue'
+import { Button } from "ant-design-vue";
+import Viser from 'viser-vue'
+import axios from 'axios'
+import store from './store'
 
-const app = new Vue({
-    el: '#app'
-});
+Vue.prototype.$axios = axios
+Vue.config.productionTip = false
+Vue.use(Viser)
+Vue.use(Antd)
+
+new Vue({
+    router,
+    store
+}).$mount('#app');
