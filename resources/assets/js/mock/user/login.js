@@ -10,7 +10,7 @@ const user = Mock.mock({
   position: '@POSITION'
 })
 
-Mock.mock('/login', 'post', ({body}) => {
+Mock.mock('/login_act', 'post', ({body}) => {
   let result = {}
   const {name, password} = JSON.parse(body)
 

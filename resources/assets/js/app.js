@@ -38,7 +38,6 @@ import Vue from 'vue'
 import router from './routes'
 import 'ant-design-vue/dist/antd.css'
 import Antd from 'ant-design-vue'
-import { Button } from "ant-design-vue";
 import Viser from 'viser-vue'
 import axios from 'axios'
 import store from './store'

@@ -3,40 +3,43 @@
     <div class="content">
       <div class="top">
         <div class="header">
-          <img alt="logo" class="logo" src="static/img/vue-antd-logo.png" />
+          <img alt="logo" class="logo" src="/storage/app/public/img/vue-antd-logo.png" />
           <span class="title">{{systemName}}</span>
         </div>
         <div class="desc">Ant Design 是西湖区最具影响力的 Web 设计规范</div>
       </div>
-      <!--<div class="login">-->
-        <!--<a-form @submit="onSubmit" :autoFormCreate="(form) => this.form = form">-->
-          <!--<a-tabs size="large" :tabBarStyle="{textAlign: 'center'}" style="padding: 0 2px;">-->
-            <!--<a-tab-pane tab="账户密码登录" key="1">-->
-              <!--<a-alert type="error" :closable="true" v-show="error" :message="error" showIcon style="margin-bottom: 24px;" />-->
-              <!--<a-form-item-->
-                <!--fieldDecoratorId="name"-->
-                <!--:fieldDecoratorOptions="{rules: [{ required: true, message: '请输入账户名', whitespace: true}]}"-->
-              <!--&gt;-->
-                <!--<a-input size="large" >-->
-                  <!--<a-icon slot="prefix" type="user" />-->
-                <!--</a-input>-->
-              <!--</a-form-item>-->
-              <!--<a-form-item-->
-                <!--fieldDecoratorId="password"-->
-                <!--:fieldDecoratorOptions="{rules: [{ required: true, message: '请输入密码', whitespace: true}]}"-->
-              <!--&gt;-->
-                <!--<a-input size="large" type="password">-->
-                  <!--<a-icon slot="prefix" type="lock" />-->
-                <!--</a-input>-->
-              <!--</a-form-item>-->
-            <!--</a-tab-pane>-->
-          <!--</a-tabs>-->
-          <!--<a-form-item>-->
-            <!--<a-button :loading="logging" style="width: 100%;margin-top: 24px" size="large" htmlType="submit" type="primary">登录</a-button>-->
-          <!--</a-form-item>-->
-        <!--</a-form>-->
-      <!--</div>-->
-        <Button type="dashed">Dashed</Button>
+      <div class="login">
+        <a-form :form="this.form" @submit="onSubmit">
+          <a-tabs size="large" :tabBarStyle="{textAlign: 'center'}" style="padding: 0 2px;">
+            <a-tab-pane tab="账户密码登录" key="1">
+              <a-alert type="error" :closable="true" v-show="error" :message="error" showIcon style="margin-bottom: 24px;" />
+              <a-form-item>
+                <a-input size="large"
+                     v-decorator="[
+                    'name',
+                    {rules: [{ required: true, message: '请输入账户名', whitespace: true}]}
+                   ]"
+                >
+                  <a-icon slot="prefix" type="user" />
+                </a-input>
+              </a-form-item>
+              <a-form-item>
+                <a-input size="large" type="password"
+                     v-decorator="[
+                        'password',
+                        {rules: [{ required: true, message: '请输入密码', whitespace: true}]}
+                    ]"
+                >
+                  <a-icon slot="prefix" type="lock" />
+                </a-input>
+              </a-form-item>
+            </a-tab-pane>
+          </a-tabs>
+          <a-form-item>
+            <a-button :loading="logging" style="width: 100%;margin-top: 24px" size="large" htmlType="submit" type="primary">登录</a-button>
+          </a-form-item>
+        </a-form>
+      </div>
     </div>
     <global-footer :link-list="linkList" :copyright="copyright" />
   </div>
@@ -48,6 +51,9 @@ import GlobalFooter from '../../layouts/GlobalFooter'
 export default {
   name: 'Login',
   components: {GlobalFooter},
+  beforeCreate () {
+      this.form = this.$form.createForm(this)
+  },
   data () {
     return {
       logging: false,
@@ -68,12 +74,13 @@ export default {
   methods: {
     onSubmit (e) {
       e.preventDefault()
-      this.form.validateFields((err, values) => {
+        this.form.validateFields((err, values) => {
         if (!err) {
+            console.log('Received values of form: ', values);
           this.logging = true
-          this.$axios.post('/login', {
-            name: this.form.getFieldValue('name'),
-            password: this.form.getFieldValue('password')
+          this.$axios.post('/api/login', {
+            uAccount: values.name,
+            uPassword: values.password
           }).then((res) => {
             this.logging = false
             const result = res.data
