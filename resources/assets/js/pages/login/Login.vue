@@ -3,10 +3,9 @@
     <div class="content">
       <div class="top">
         <div class="header">
-          <img alt="logo" class="logo" src="/storage/app/public/img/vue-antd-logo.png" />
+          <img alt="logo" class="logo" src="/storage/img/abc.png" />
           <span class="title">{{systemName}}</span>
         </div>
-        <div class="desc">Ant Design 是西湖区最具影响力的 Web 设计规范</div>
       </div>
       <div class="login">
         <a-form :form="this.form" @submit="onSubmit">
@@ -76,7 +75,6 @@ export default {
       e.preventDefault()
         this.form.validateFields((err, values) => {
         if (!err) {
-            console.log('Received values of form: ', values);
           this.logging = true
           this.$axios.post('/api/login', {
             uAccount: values.name,
@@ -85,9 +83,12 @@ export default {
             this.logging = false
             const result = res.data
             if (result.code >= 0) {
+              const token = result.data.token
+                //保存登录用户的信息
               const user = result.data.user
+              this.$store.commit('profile', user)
+              this.$store.dispatch('logined', token)
               this.$router.push('/dashboard/workplace')
-              this.$store.commit('account/setuser', user)
               this.$message.success(result.message, 3)
             } else {
               this.error = result.message

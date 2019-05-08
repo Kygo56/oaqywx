@@ -13,9 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
-//login
+//login logout
 Route::post('/login', "Api\LoginController@login");
+Route::post('/logout', "Api\LoginController@logout");
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('api')->group(function(){
+    Route::get('/user/getUser/{id}', "Api\UserController@getUser")->where('id', '[0-9]+');
+    Route::get('/user/getUsers', "Api\UserController@getUsers");
 });

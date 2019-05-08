@@ -1,21 +1,8 @@
 <template>
-  <page-layout :avatar="currUser.avatar">
+  <page-layout :avatar="currUser.uAvatar">
     <div slot="headerContent">
-      <div class="title">{{currUser.timefix}}，{{currUser.name}}，{{currUser.welcome}}</div>
+      <div class="title">{{currUser.timefix}}，{{currUser.uName}}，{{currUser.welcome}}</div>
       <div>{{currUser.position}}</div>
-    </div>
-    <div slot="extra">
-      <a-row>
-        <a-col :sm="8" :xs="24">
-          <head-info title="项目数" content="56" :bordered="true"/>
-        </a-col>
-        <a-col :sm="8" :xs="24">
-          <head-info title="团队内排名" content="8/24" :bordered="true"/>
-        </a-col>
-        <a-col :sm="8" :xs="24">
-          <head-info title="项目访问" content="2,223"/>
-        </a-col>
-      </a-row>
     </div>
     <div>
       <a-row style="margin: 0 -12px">
@@ -105,40 +92,40 @@ export default {
   },
   computed: {
     currUser () {
-      return this.$store.state.account.user
+        return this.$store.getters.getAdminUser;
     }
   },
   mounted () {
-    this.getProjectList()
-    this.getActivites()
-    this.getTeams()
+    // this.getProjectList()
+    // this.getActivites()
+    // this.getTeams()
   },
   methods: {
-    getProjectList () {
-      this.$axios({
-        method: 'get',
-        url: '/project'
-      }).then(res => {
-        this.projects = res.data
-        this.loading = false
-      })
-    },
-    getActivites () {
-      this.$axios({
-        method: 'get',
-        url: '/work/activity'
-      }).then(res => {
-        this.activities = res.data
-      })
-    },
-    getTeams () {
-      this.$axios({
-        method: 'get',
-        url: '/work/team'
-      }).then(res => {
-        this.teams = res.data
-      })
-    }
+    // getProjectList () {
+    //   this.$axios({
+    //     method: 'get',
+    //     url: '/project'
+    //   }).then(res => {
+    //     this.projects = res.data
+    //     this.loading = false
+    //   })
+    // },
+    // getActivites () {
+    //   this.$axios({
+    //     method: 'get',
+    //     url: '/work/activity'
+    //   }).then(res => {
+    //     this.activities = res.data
+    //   })
+    // },
+    // getTeams () {
+    //   this.$axios({
+    //     method: 'get',
+    //     url: '/work/team'
+    //   }).then(res => {
+    //     this.teams = res.data
+    //   })
+    // }
   }
 }
 </script>

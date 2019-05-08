@@ -35,6 +35,7 @@
         "foundation-sites": "^6.5.3",
         "mock": "^0.1.1",
         "mockjs": "^1.0.1-beta3",
+        "nprogress": "^0.2.0",
         "viser-vue": "^2.4.5",
         "vuedraggable": "^2.20.0"
     }

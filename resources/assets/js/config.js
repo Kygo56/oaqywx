@@ -3,7 +3,6 @@
  */
 var api_url = '';
 var app_url = '';
-var asset_path = '/assets/images';
 var gaode_maps_js_api_key = '33c20882595f1fecc2d31c8c73a38da7';
 
 switch( process.env.NODE_ENV ){

@@ -14,11 +14,9 @@
         <span>设置</span>
       </a-menu-item>
       <a-menu-divider />
-      <a-menu-item>
-        <router-link to="/login">
+      <a-menu-item @click="logout">
           <a-icon type="poweroff" />
           <span>退出登录</span>
-        </router-link>
       </a-menu-item>
     </a-menu>
   </a-dropdown>
@@ -29,8 +27,20 @@ export default {
   name: 'HeaderAvatar',
   computed: {
     currUser () {
-      return this.$store.state.account.user
+      return this.$store.getters.getAdminUser;
     }
+  },
+  methods:{
+      logout(){
+          this.$axios.post('/api/logout').then(res => {
+              const result = res.data
+              if (result.code >= 0) {
+                  this.$store.commit('logout')
+                  this.$router.push('/login')
+                  this.$message.success(result.message, 3)
+              }
+          })
+      }
   }
 }
 </script>

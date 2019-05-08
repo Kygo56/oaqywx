@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import Router from 'vue-router'
 import Dashboard from './pages/dashboard/Analysis'
 import NotFound from './pages/exception/404'
 import NotPermit from './pages/exception/403'
@@ -25,15 +24,13 @@ import BasicDetail from './pages/detail/BasicDetail'
 import AdvancedDetail from './pages/detail/AdvancedDetail'
 import TaskCard from './pages/components/TaskCard'
 import ColorBox from './pages/components/Palette'
-import Test from './test'
 
-Vue.use(Router)
 import VueRouter from 'vue-router'
-
+import * as types from './modules/types'
+import store from './store'
 Vue.use(VueRouter)
 
-export default new VueRouter({
-        routes:[
+       const routes = [
             {
                 path: '/login',
                 name: '登录页',
@@ -50,9 +47,9 @@ export default new VueRouter({
                 children: [
                     {
                         path: '/dashboard',
-                        name: 'dashboard',
+                        name: '快捷菜单',
                         component: RouteView,
-                        icon: 'dashboard',
+                        icon: 'robot',
                         children: [
                             {
                                 path: '/dashboard/workplace',
@@ -78,12 +75,18 @@ export default new VueRouter({
                                 path: '/form/basic',
                                 name: '基础表单',
                                 component: BasicForm,
+                                meta: {
+                                    auth: true  // 是否需要判断是否登录,这里是需要判断
+                                },
                                 icon: 'none'
                             },
                             {
                                 path: '/form/step',
                                 name: '分步表单',
                                 component: StepForm,
+                                meta: {
+                                    auth: true
+                                },
                                 icon: 'none'
                             },
                             {
@@ -235,5 +238,33 @@ export default new VueRouter({
                     }
                 ]
             }
-        ]
-})
+        ];
+
+        // 页面刷新时，重新赋值token
+        if (localStorage.getItem('token')) {
+            store.commit('refreshToken', localStorage.getItem('token'))
+        }
+
+        const router = new VueRouter({
+            routes
+        });
+
+        router.beforeEach((to, from, next) => {
+            if (to.matched.some(r => r.meta.auth)) {
+                if (localStorage.getItem('token')) {
+                    next();
+                }
+                else {
+                    next({
+                        path: '/login',
+                        query: {redirect: to.fullPath}
+                    })
+                }
+            }
+            else {
+                next();
+            }
+        });
+
+        export default router
+

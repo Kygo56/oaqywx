@@ -19,12 +19,12 @@
  * ]
  **/
 import Menu from 'ant-design-vue/es/menu'
-//import Icon from 'ant-design-vue/es/icon/icon'
+import Icon from 'ant-design-vue/es/icon'
 
 const {Item, SubMenu} = Menu
 
 // 默认菜单图标数组，如果菜单没配置图标，则会设置从该数组随机取一个图标配置
-const iconArr = ['dashboard', 'user', 'form', 'setting', 'message', 'safety', 'bell', 'delete', 'code-o', 'poweroff', 'eye-o', 'hourglass']
+const iconArr = ['robot', 'user', 'form', 'setting', 'message', 'safety', 'bell', 'delete', 'code-o', 'poweroff', 'eye-o', 'hourglass']
 
 export default {
   name: 'IMenu',

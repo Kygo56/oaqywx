@@ -3,11 +3,19 @@
 namespace app\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\UserLog;
+use App\WXCrypt\WXBizDataCrypt;
+use Illuminate\Support\Facades\Auth;
+
 
 class LoginController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('refresh', ['except' => 'login']);
+    }
+
     public function login()
     {
         $account = request()->post();
@@ -18,11 +26,23 @@ class LoginController extends Controller
             $password = md5($salt . $account['uPassword']);
             if($user->uPassword == $password){
                 request()->session()->put('user', $user);
+
+                //插入一条管理员登录日志
+                $userlog = new UserLog;
+                $userlog->olname = $user->uName;
+                $userlog->olstarttime = date('Y-m-d H:i:s', time());
+                $userlog->olip = request()->server('REMOTE_ADDR');
+                $userlog->save();
+
+
+                $token = auth('api')->login($user);
+
                 return response()->json([
                     'code' => 0,
                     'message' => $user->uAccount . ' 欢迎回来',
                     'data' => [
-                        'user' => $user
+                        'user' => $user,
+                        'token' => $token
                     ]
                 ]);
             }else{
@@ -37,5 +57,16 @@ class LoginController extends Controller
                 'message' => '用户名不存在！'
             ]);
         }
+    }
+
+    public function logout()
+    {
+        auth('api')->logout();
+        request()->session()->forget('user');
+
+        return response()->json([
+            'code' => 0,
+            'message' => '退出登录'
+        ]);
     }
 }
